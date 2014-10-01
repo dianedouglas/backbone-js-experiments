@@ -1,3 +1,4 @@
+// INSTANTIATE, GET, SET.
 // models contain data for an app as well as logic around the data
 // ex concept of a todo item, including attributes like title/completed.
 // so it's a class.
@@ -73,4 +74,108 @@ todo4.set({
 });
 console.log('Changed more than 1 attribute at a time on an instance.\n Title: ' + todo4.get('title') + ' completed: ' + todo4.get('completed'));
 
+// *********************************************************
+console.log('\n\n\n\n\n\n\n\n\n\nNow dealing with Person model.');
 //when any of these attributes alter the state of a model, a change event is triggered.
+// To bypass triggers bound to the model, use .attributes method. Can also send {silent:true} to cancel individual change:attr events.
+
+//SETTING EVENT LISTENER / CHANGE EVENTS.
+
+//create a model, not an instance of a model? or just alternate way of instantiating?
+// difference between var Todo = new Backbone.Model() and var Todo = Backbone.Model.extend({});
+
+var Person = new Backbone.Model();
+//run this function when the name attribute is changed.
+Person.on("change:name", function(){
+  console.log('Name changed.')
+});
+
+Person.set({name: 'Matt'});
+console.log('Here is the new name: ' + Person.get('name')); //should be Matt.
+Person.set({name: 'Batman'}, {silent: true}); //change to secret identity!
+//check if the silent change occurred:
+console.log('Person has changed their name: ' + Person.hasChanged('name'));
+console.log('Person has changed something, anything: ' + Person.hasChanged(null));
+console.log('Here is the new name: ' + Person.get('name')); //should be Batman.
+console.log('\n\n');
+// best practice to use Model.set(), or direct instantiation.
+
+// bind listener to the model for its change event in initialize using:
+//     this.on('change', function(){ /*code here*/ });
+//     this.on('change:name', function(){ /*code here*/ });
+
+var Friend = Backbone.Model.extend({
+  defaults: {
+    name: 'None',
+    city: 'Faketown',
+    state: 'FU'
+  },
+  initialize: function(){
+    console.log('initialized.');
+    this.on('change', function(){
+      console.log('Something is different here... Attributes: ');
+      console.log(this.toJSON());
+    });
+  }
+});
+
+var beth = new Friend();
+
+console.log('Test defaults: ');
+console.log(beth.toJSON());
+beth.set('name', 'Beth');
+
+beth.set('city', 'Portland');
+beth.set('state', 'OR');
+console.log("\n\nbeth's city: " + beth.get('city'));
+console.log("beth's state: " + beth.get('state') + '\n\n\n\n');
+
+// set more than one attribute at once and the listener is only triggered once.
+//remember to separate by commas in set hash. initialize same as a normal js hash.
+//apparently both of these work.
+beth.set({
+  'name': 'Elizabeth Gaunt',
+  'city': 'Bitterwater',
+  'state': 'Hell'
+});
+beth.set({
+  name: 'Legolas',
+  city: 'Rivendell',
+  state: 'Middle Earth'
+});
+
+console.log('\n\n\n\n');
+//also remember commas between properties in defaults hash, and between defaults, initialize, etc.
+var Celebrity = Backbone.Model.extend({
+  defaults: {
+    name: 'stupid',
+    status: 'cool',
+    age: 21
+  },
+  initialize: function(){
+    this.on('change:status', function(){
+      console.log('this celebrity status has changed.');
+      console.log('this.get(status) = ' + this.get('status'));
+    });
+  },
+  //make a function to set an attribute.
+  setStatus: function(newStatus){
+    this.set({status: newStatus});
+  }
+});
+
+console.log('\n\n\n\n');
+
+var orlandoBloom = new Celebrity({
+  name: 'Orlando Bloom',
+  status: 'awesome',
+  age: 33
+});
+
+console.log('initializing does not trigger the listner.\n\n');
+
+orlandoBloom.set('status', 'adorable'); //listenter triggered
+orlandoBloom.setStatus('lame'); //here too.
+
+orlandoBloom.set('name', 'legolas');
+console.log('had to print this change manually because it does not trigger the event listener. ' + orlandoBloom.get('name'));
