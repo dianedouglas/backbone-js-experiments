@@ -20,10 +20,23 @@ console.log(JSON.stringify(todo2));
 
 
 // initialize() method optional, called automatically with a new instance like normal js.
+// var Todo = Backbone.Model.extend({
+//   initialize: function(){
+//     console.log("Initialized.");
+//   }
+// })
+
+// var todo3 = new Todo();
+
+// use 'defaults' property for default values for model. case of incomplete user data.
 var Todo = Backbone.Model.extend({
+  defaults: {
+    title: 'Hi there!',
+    completed: false
+  },
   initialize: function(){
     console.log("Initialized.");
   }
-})
-
-var todo3 = new Todo();
+});
+var todo4 = new Todo();
+console.log(JSON.stringify(todo4));
