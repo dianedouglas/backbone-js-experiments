@@ -19,3 +19,11 @@ console.log(JSON.stringify(todo1));
 console.log(JSON.stringify(todo2));
 
 
+// initialize() method optional, called automatically with a new instance like normal js.
+var Todo = Backbone.Model.extend({
+  initialize: function(){
+    console.log("Initialized.");
+  }
+})
+
+var todo3 = new Todo();
