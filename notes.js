@@ -179,3 +179,60 @@ orlandoBloom.setStatus('lame'); //here too.
 
 orlandoBloom.set('name', 'legolas');
 console.log('had to print this change manually because it does not trigger the event listener. ' + orlandoBloom.get('name'));
+console.log('\n\n\n\n')
+// MODEL VALIDATION
+
+// check attribute values before setting them with model.validate()
+// validation occurs automatically when model is persisted using save()
+// or when set() is called if {validate:true} is passed as an arg.
+
+var Thing = new Backbone.Model({name: 'Jeremy'});
+Thing.validate = function(attrs) {
+  if(!attrs.name){
+    return 'I need a name for the thing.';
+  }
+};
+
+// Change name
+Thing.set({name: 'Samuel'});
+console.log(Thing.get('name'));
+
+// remove name attr and force validation
+Thing.unset('name', {validate: true});
+console.log('still Samuel: ' + Thing.get('name'));
+console.log("that was a stupid example here's a better way of doing it.");
+//incidentally you cant do var instance = new Thing(); if initialized this way.
+
+console.log('\n\n\n')
+//validate returns nothing if attrs provided are valid.
+//error returned if invalid.
+//invalid event will be triggered, setting the validationError property on the model
+//save will not continue and attrs of model will not be modified.
+
+var Task = Backbone.Model.extend({
+  defaults: {
+    completed: false
+  },
+//pass object attributes to validate so you can check each one.
+  validate: function(attributes){
+    if(attributes.title === undefined){
+      return "Remember to set a title for your task.";
+    }
+  },
+//in initialize set listener for 'invalid' instead of change. same format.
+  initialize: function(){
+    console.log('Initialized.');
+    this.on('invalid', function(model, error){
+      console.log('This message is set in the initialize method where I set up the this.on("invalid") listener. \nHere is the error returned by validate function: \n' + error);
+    });
+  }
+});
+
+var myTask = new Task();
+myTask.set('completed', true, {validate: true}); //error is printed.
+console.log('completed attribute has not been set. still false. ' + myTask.get('completed'));
+
+//attributes object passed to validate function represents what attrs would be after completing set/save.
+//distinct from current attributes of model and params passed to operation. ca't change attrs of input within the function
+//you can change attrs in nested objects. more here: http://jsfiddle.net/2NdDY/270/
+
