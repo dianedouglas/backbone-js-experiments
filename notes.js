@@ -40,3 +40,9 @@ var Todo = Backbone.Model.extend({
 });
 var todo4 = new Todo();
 console.log(JSON.stringify(todo4));
+
+//instantiate with some or all attributes.
+var todo5 = new Todo({
+  title: 'My name is mud.'
+});
+console.log(JSON.stringify(todo5));
