@@ -46,3 +46,17 @@ var todo5 = new Todo({
   title: 'My name is mud.'
 });
 console.log(JSON.stringify(todo5));
+
+//get attribute values from a model with .get() without JSON.stringify()
+console.log('Fetching titles:' + todo4.get('title') + todo5.get('title'));
+
+//get all attributes as an object with .toJSON() method:
+var todo4Attributes = todo4.toJSON();
+console.log('Print attribute object: ')
+console.log(todo4Attributes)
+//incidentally do separate lines for this.
+// the attributes get lost and the object instance is printed if you try to print with a string in console.
+
+//another example:
+var todo5Attributes = todo5.toJSON();
+console.log(todo5Attributes)
