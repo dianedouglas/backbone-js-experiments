@@ -60,3 +60,17 @@ console.log(todo4Attributes)
 //another example:
 var todo5Attributes = todo5.toJSON();
 console.log(todo5Attributes)
+
+//use Model.set() to change attributes.
+todo5.set('title', 'Here is a new title!!!');
+todo5.set('completed', true);
+console.log('Used Model.set() to change attributes on an instance.\n Title: ' + todo5.get('title') + ' completed: ' + todo5.get('completed'));
+
+//more than one attribute. just like defaults hash.
+todo4.set({
+  title: 'Acid Bath Rules',
+  completed: true
+});
+console.log('Changed more than 1 attribute at a time on an instance.\n Title: ' + todo4.get('title') + ' completed: ' + todo4.get('completed'));
+
+//when any of these attributes alter the state of a model, a change event is triggered.
