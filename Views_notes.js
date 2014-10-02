@@ -32,3 +32,23 @@ var ToDoViewSkeletonX = Backbone.View.extend({
 var todoXView = new ToDoView({el: $('#footer')});
 
 //When declaring a view, options, el, tagName, id and className can all be functions.
+
+
+// also frequently need to run jquery functions on the el element and elements nested within it.
+// get the jquery location of the view element:
+// view.$el
+
+// get nested elements:
+// view.$(selector)
+// same as $(view.el).find(selector)
+
+
+
+
+
+
+
+
+
+
+
